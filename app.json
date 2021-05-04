@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "Weather App",
+    "description": "This is a weather app.",
+    "slug": "weather-app",
+    "version": "1.1",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "buildNumber": "1.1"
+    },
+    "android": {
+      "permissions": [],
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=app.web.prashoonapps.weatherapp",
+      "package": "app.web.prashoonapps.weatherapp",
+      "versionCode": 2,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
+    "githubUrl": "https://github.com/Prashoon123/expo-weather-app"
+  }
+}
