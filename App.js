@@ -11,12 +11,13 @@ import {
 import { Button, Text } from "react-native-elements";
 import { Card } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { APP_ID } from "./keys";
 
 export default function App() {
   const [weatherData, setWeatherData] = useState([]);
   const [input, setInput] = useState("");
 
-  const APP_ID = "4e37f8b62d902930c305918453b619f3";
+  console.log(APP_ID);
 
   const findWeather = () => {
     if (!input) {
@@ -26,11 +27,7 @@ export default function App() {
     Keyboard.dismiss();
 
     fetch(
-      "https://api.openweathermap.org/data/2.5/weather?q=" +
-        input +
-        "&appid=" +
-        APP_ID +
-        "&units=metric"
+      `https://api.openweathermap.org/data/2.5/weather?q=${input}&appid=${APP_ID}&units=metric`
     )
       .then((response) => response.json())
       .then((data) => {
