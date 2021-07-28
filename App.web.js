@@ -1,0 +1,171 @@
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
+import { Keyboard, SafeAreaView, Platform } from "react-native";
+import {
+  StyleSheet,
+  View,
+  StatusBar as RNStatusBar,
+  TextInput,
+  Image,
+} from "react-native";
+import { Button, Text } from "react-native-elements";
+import { Card } from "react-native-elements";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { APP_ID } from "./keys";
+
+export default function App() {
+  const [weatherData, setWeatherData] = useState([]);
+  const [input, setInput] = useState("");
+
+  console.log(APP_ID);
+
+  const findWeather = () => {
+    if (!input) {
+      return;
+    }
+
+    Keyboard.dismiss();
+
+    fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${input}&appid=${APP_ID}&units=metric`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setWeatherData(data);
+      });
+
+    setInput("");
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="light" />
+      <View style={styles.inputContainer}>
+        <View style={styles.inputView}>
+          <Icon name="search" size={24} color="white" />
+          <TextInput
+            placeholder="Enter a location"
+            placeholderTextColor="white"
+            style={[styles.input, { outline: "none" }]}
+            value={input}
+            onChangeText={(text) => setInput(text)}
+            onSubmitEditing={findWeather}
+          />
+        </View>
+        <Button
+          onPress={findWeather}
+          containerStyle={styles.button}
+          title="Search"
+          raised
+        />
+      </View>
+      {weatherData?.main?.temp && (
+        <>
+          <View style={styles.result}>
+            <Card containerStyle={styles.card}>
+              <Text style={styles.title} h3>
+                Location: {weatherData?.name}
+              </Text>
+              <Text style={styles.text} h4>
+                Temperature: {weatherData?.main?.temp}°C
+              </Text>
+              <Text style={styles.text} h4>
+                Description: {weatherData["weather"][0]["description"]}
+              </Text>
+              <Text style={styles.text} h4>
+                Humidity: {weatherData?.main?.humidity}%
+              </Text>
+              <Text style={styles.text} h4>
+                Visibility: {weatherData?.visibility} meters
+              </Text>
+              <Text style={styles.text} h4>
+                Pressure: {weatherData?.main?.pressure} hPa
+              </Text>
+              {weatherData?.main?.temp <= 10.99 && (
+                <Image
+                  source={require("./assets/frost.png")}
+                  style={styles.image}
+                />
+              )}
+              {weatherData?.main?.temp <= 20.99 &&
+                weatherData?.main?.temp >= 11 && (
+                  <Image
+                    source={require("./assets/cold.png")}
+                    style={styles.image}
+                  />
+                )}
+              {weatherData?.main?.temp <= 30.99 &&
+                weatherData?.main?.temp >= 21 && (
+                  <Image
+                    source={require("./assets/humid.png")}
+                    style={styles.image}
+                  />
+                )}
+              {weatherData?.main?.temp <= 40.99 &&
+                weatherData?.main?.temp >= 31 && (
+                  <Image
+                    source={require("./assets/hot.png")}
+                    style={styles.image}
+                  />
+                )}
+            </Card>
+          </View>
+        </>
+      )}
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#2E3040",
+    paddingTop: Platform.OS === "android" ? RNStatusBar.currentHeight : 0,
+  },
+  inputContainer: {
+    marginTop: 50,
+    flex: 0.2,
+  },
+  input: {
+    color: "white",
+    width: "100%",
+    alignSelf: "center",
+  },
+  button: {
+    width: "70%",
+    alignSelf: "center",
+  },
+  result: {
+    flex: 0.8,
+    alignItems: "center",
+  },
+  card: {
+    width: 360,
+    height: "auto",
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  inputView: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    borderColor: "#fff",
+    borderWidth: 1,
+    marginBottom: 10,
+    padding: 10,
+    width: "85%",
+    alignSelf: "center",
+    borderRadius: 5,
+  },
+  image: {
+    height: 100,
+    width: 100,
+    alignSelf: "center",
+  },
+  text: {
+    alignSelf: "center",
+  },
+  title: {
+    alignSelf: "center",
+  },
+});
